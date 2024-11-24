@@ -27,10 +27,9 @@ connectDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: ['https://ricetable-wmo2.onrender.com'],  // 클라이언트 도메인
-    credentials: true,  // 쿠키/인증 헤더 허용
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 허용할 HTTP 메서드
-    allowedHeaders: ['Content-Type', 'Authorization'] // 허용할 헤더
+    origin: ['https://ricetable-wmo2.onrender.com', 'http://localhost:3000'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
