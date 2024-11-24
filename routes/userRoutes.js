@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/usersModel");
 const cookieParser = require("cookie-parser");
 const checkLogin = require("../middlewares/checkLogin");
-const {registerUser, loginUser, logoutUser, getUserProfile} = require("../controllers/userController");
+const {registerUser, loginUser, logoutUser, getUserProfile, checkUserid} = require("../controllers/userController");
 const path = require("path");
 router.use(cookieParser());
 
@@ -15,6 +15,7 @@ router.get("/login", (req, res) => {
 router.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/regi.html"));
 });
+router.post("/users/check-userid", checkUserid);
 
 router.get("/", checkLogin, (req, res) => {
     res.send("Home page 로그인 확인");

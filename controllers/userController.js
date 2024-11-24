@@ -82,7 +82,43 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 }); 
 
+const checkUserid = asyncHandler(async (req, res) => {
+  try {
+      const { userid } = req.body;
+      
+      // userid 입력 확인
+      if (!userid) {
+          return res.status(400).json({ 
+              available: false, 
+              message: "아이디를 입력해주세요." 
+          });
+      }
 
+      // userid 최소 길이 검사 (validateInput 함수의 규칙과 일치시킴)
+      if (userid.length < 4) {
+          return res.status(400).json({
+              available: false,
+              message: "아이디는 최소 4자 이상이어야 합니다."
+          });
+      }
+
+      // 데이터베이스에서 userid 검색
+      const existingUser = await User.findOne({ userid });
+      
+      // 결과 반환
+      res.json({
+          available: !existingUser,
+          message: existingUser ? "이미 사용중인 아이디입니다." : "사용 가능한 아이디입니다."
+      });
+
+  } catch (error) {
+      console.error("ID 중복 확인 중 오류 발생:", error);
+      res.status(500).json({ 
+          available: false, 
+          message: "서버 오류가 발생했습니다." 
+      });
+  }
+});
 
 
 const loginUser = asyncHandler(async (req, res) => {
@@ -166,4 +202,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
           });
       }
   });
-    module.exports = {registerUser, loginUser, logoutUser, getUserProfile};
+    module.exports = {registerUser, loginUser, logoutUser, getUserProfile, checkUserid};
