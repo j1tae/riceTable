@@ -27,9 +27,11 @@ connectDb();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
-    origin: 'https://riceserver.onrender.com',
-    // credentials: true, // 인증 정보(쿠키 등) 허용
-  }));
+    origin: ['https://ricetable-wmo2.onrender.com'],  // 클라이언트 도메인
+    credentials: true,  // 쿠키/인증 헤더 허용
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // 허용할 HTTP 메서드
+    allowedHeaders: ['Content-Type', 'Authorization'] // 허용할 헤더
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 
@@ -40,7 +42,7 @@ const { protect } = require('./middlewares/authMiddleware'); // 인증 미들웨
 
 // 라우트 설정
 app.use(userRoutes); // '/'삭제
-app.use('/api/posts',protect, postRoutes);
+app.use('/api/posts', protect, postRoutes);
 app.use('/api/user', userRoutes);
 
 // 메인 페이지 라우팅
